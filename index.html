@@ -1113,6 +1113,7 @@ function shortLabel(name) {
     const map = {"Disorders of Movement and their Clinical Management":"Disorders of Movement","Pathology of Movement Disorders":"Pathology of Movement"};
     return map[name] || name;
 }
+window.__bbShortLabel = shortLabel;
 
 /* ============================================================
    RENDER — question cards grouped by section
@@ -2858,10 +2859,9 @@ function bbSetLayout(v) { try { localStorage.setItem('bb_layout', v); } catch (e
 
                     const navBtn = document.createElement('button');
                     let btnText = currentSection;
-                    if (btnText.includes("Posterior Abdominal Wall")) btnText = "Posterior Abdominal Wall";
-                    if (btnText.includes("Urinary Histology")) btnText = "Urinary Histology";
-                    if (btnText.includes("Renal Clearance")) btnText = "Renal Clearance";
-                    
+                    // Use the new design's short section label (from the parent page) so the
+                    // header jump buttons stay compact; fall back to the full name if unavailable.
+                    try { if (window.parent && typeof window.parent.__bbShortLabel === "function") { const _s = window.parent.__bbShortLabel(currentSection); if (_s) btnText = _s; } } catch (e) {}
                     navBtn.textContent = btnText;
                     navBtn.onclick = () => {
                         document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
