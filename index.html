@@ -993,7 +993,7 @@
                 <div class="qm"><span class="n" id="meta-sec">0</span><span class="l">Sections</span></div>
                 <div class="qm"><span class="n" id="meta-mode">Tutor</span><span class="l">Mode</span></div>
             </div>
-            <div class="mode-hint" id="mode-hint" style="display:flex"><span class="mh-ic">💡</span><span id="mode-hint-text">Added toggle in the settings dropdown to switch to old quiz site design (switch back to new from theme menu)</span></div>
+            <div class="mode-hint" id="mode-hint" style="display:flex"><span class="mh-ic">💡</span><span id="mode-hint-text">Added toggle in the settings dropdown to switch to old quiz site design</span></div>
         </div>
 
         <div id="tutor-tracker" aria-live="polite"></div>
@@ -2389,7 +2389,7 @@ function bbSetLayout(v) { try { localStorage.setItem('bb_layout', v); } catch (e
     const styleSel = document.getElementById('bg-style-select');
     if (styleSel) styleSel.value = savedStyle;
     window.bgFx && window.bgFx.setStyle(savedStyle);
-    applyBackground(localStorage.getItem('bb_bgEnabled') !== 'false');
+    applyBackground(localStorage.getItem('bb_bgEnabled') === 'true');
     applyAccents(localStorage.getItem('bb_accentsEnabled') !== 'false');
     // LO visibility (quiz-local; default OFF)
     const loOn = localStorage.getItem(K.showLO) === 'true';
@@ -2750,7 +2750,8 @@ function bbSetLayout(v) { try { localStorage.setItem('bb_layout', v); } catch (e
         @media (max-width: 768px) {
             .header-top { flex-direction: column; align-items: flex-start; }
             .controls-wrapper { width: 100%; justify-content: flex-start; }
-            .section-nav { justify-content: flex-start; }
+            .section-nav { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 6px; scrollbar-width: thin; }
+            .section-nav button { flex-shrink: 0; white-space: nowrap; }
             .custom-builder { justify-content: flex-start; }
             header h1 { font-size: 1.25rem; }
         }
