@@ -1619,7 +1619,11 @@ function finishQuiz() {
         if (!proceed) return;
     }
     graded = true;
-    submitted = { all: true };
+    // Mark every answered question as individually submitted, then set the exam flag.
+    // Replacing the whole map here used to discard the tutor record, so switching back
+    // to Tutor after grading blanked every reveal - permanently, once saved.
+    quizData.forEach((_, i) => { if (answers[i] != null) submitted[i] = true; });
+    submitted.all = true;
     save(K.submitted, submitted);
     quizData.forEach((_, i) => { revealAnswer(i); updateNavCell(i); });
     applyModeUI();
@@ -1747,7 +1751,11 @@ function reviewAll() {
         save(K.answers, answers);
     }
     graded = true;
-    submitted = { all: true };
+    // Mark every answered question as individually submitted, then set the exam flag.
+    // Replacing the whole map here used to discard the tutor record, so switching back
+    // to Tutor after grading blanked every reveal - permanently, once saved.
+    quizData.forEach((_, i) => { if (answers[i] != null) submitted[i] = true; });
+    submitted.all = true;
     save(K.submitted, submitted);
     retryMode = false;
     const banner = document.getElementById('retry-banner');
@@ -1827,7 +1835,12 @@ function retryIncorrect() {
     retrySet = wrong.slice();
     save(K.retrySet, retrySet);
     // reset grading + the wrong answers
-    graded = false; submitted = {}; save(K.submitted, submitted);
+    graded = false;
+    // Clear the submission record for the retried questions only; the ones already
+    // answered correctly keep their tutor feedback.
+    wrong.forEach(i => { delete submitted[i]; });
+    delete submitted.all;
+    save(K.submitted, submitted);
     wrong.forEach(i => { delete answers[i]; });
     save(K.answers, answers);
     const rc = document.getElementById('results-card');
